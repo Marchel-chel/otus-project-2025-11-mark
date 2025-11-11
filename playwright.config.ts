@@ -1,17 +1,16 @@
 import { defineConfig, devices } from "@playwright/test";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 export default defineConfig({
   testDir: "./tests",
-  reporter: [
-    ["list"],
-    ["html"],
-    ["allure-playwright"], // Allure-репорт
-  ],
+  timeout: 30_000,
+  expect: { timeout: 5_000 },
+  reporter: [["html", { outputFolder: "playwright-report" }]],
   use: {
-    baseURL: "https://demowebshop.tricentis.com",
+    baseURL: process.env.BASE_URL || "https://demowebshop.tricentis.com",
     trace: "retain-on-failure",
-    screenshot: "only-on-failure",
-    video: "retain-on-failure",
+    headless: false,
   },
   projects: [
     {
