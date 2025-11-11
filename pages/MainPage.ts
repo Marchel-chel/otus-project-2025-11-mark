@@ -67,12 +67,25 @@ class MainPage {
   async assertUserIsLoggedIn(expectedEmail: string) {
     await assertElementVisibility(
       this.customerInfo,
-      "информация о залогиненом пользователе в шапке"
+      "email залогиненого пользователя в шапке"
     );
     await assertElementHasText(
       this.customerInfo,
-      "информация о залогиненом пользователе в шапке",
+      "email залогиненого пользователя в шапке",
       expectedEmail
+    );
+  }
+
+  async logout() {
+    await this.logOutBtn.click();
+    await assertElementVisibility(
+      this.customerInfo,
+      "email залогиненого пользователя в шапке",
+      false
+    );
+    await assertElementVisibility(
+      this.logInLink,
+      "ссылка на страницу логина в шапке"
     );
   }
 }
