@@ -5,7 +5,13 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "npx playwright test",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "PWDEBUG=1 playwright test",
+    "allure:generate": "allure generate -c allure-results -o allure-report",
+    "allure:open": "allure open allure-report",
+    "allure:serve": "allure serve allure-results",
+    "pretest": "echo \"BROWSER=Chromium\nBASE_URL=https://demowebshop.tricentis.com\nAUTHOR=Marchel\nPROJECT=Otus Playwright Demo\" > allure-results/environment.properties",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write ."
   },
@@ -18,6 +24,7 @@
     "@types/node": "^24.10.0",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",
+    "allure-commandline": "^2.34.1",
     "allure-playwright": "^3.4.2",
     "dotenv": "^17.2.3",
     "eslint": "^9.39.1",
