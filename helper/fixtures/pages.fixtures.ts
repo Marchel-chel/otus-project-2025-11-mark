@@ -1,11 +1,13 @@
-import { test as fixtureTest } from "@playwright/test";
-import LoginPage from "../../pages/LoginPage";
-import MainPage from "../../pages/MainPage";
+import { test as fixtureTest } from '@playwright/test';
+import LoginPage from '../../pages/LoginPage';
+import MainPage from '../../pages/MainPage';
+import CategoryPage from '../../pages/CategoryPage';
 
 export const test = fixtureTest.extend<{
   mainPage: MainPage;
   loginPage: LoginPage;
   loggedInMainPage: MainPage;
+  categoryPage: CategoryPage;
 }>({
   mainPage: async ({ page }, use) => {
     const mainPage = new MainPage(page);
@@ -30,6 +32,12 @@ export const test = fixtureTest.extend<{
 
     await use(mainPage);
   },
+
+  categoryPage: async ({ page }, use) => {
+    const categoryPage = new CategoryPage(page);
+
+    await use(categoryPage);
+  },
 });
 
-export { expect } from "@playwright/test";
+export { expect } from '@playwright/test';
