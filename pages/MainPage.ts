@@ -2,6 +2,7 @@ import type { Page, Locator } from '@playwright/test';
 import { waitForUrl } from '../helper/pageActions';
 import { assertElementHasText, assertElementVisibility } from '../helper/elements';
 import 'dotenv/config';
+import { expectValueToBeGreaterThan, expectToEqual } from '../helper/comparisons';
 
 class MainPage {
   readonly baseUrl!: string;
@@ -16,6 +17,12 @@ class MainPage {
   readonly categoriesContainer: Locator;
   readonly categoryLink: (name: string) => Locator;
 
+  readonly searchInput: Locator;
+  readonly searchButton: Locator;
+  readonly searchResultsContainer: Locator;
+  readonly searchResultItems: Locator;
+  readonly searchResultTitles: Locator;
+
   constructor(readonly page: Page) {
     this.baseUrl = process.env.BASE_URL!;
 
@@ -28,6 +35,12 @@ class MainPage {
 
     this.categoriesContainer = this.page.locator('//div[contains(@class, "header-menu")]');
     this.categoryLink = (name: string) => this.categoriesContainer.getByRole('link', { name, exact: true });
+
+    this.searchInput = this.page.locator('//input[contains(@id, "small-searchterms")]');
+    this.searchButton = this.page.locator('//input[contains(@class, "search-box-button")]');
+    this.searchResultsContainer = this.page.locator('//div[contains(@class, "product-grid")]');
+    this.searchResultItems = this.searchResultsContainer.locator('//div[contains(@class, "item-box")]');
+    this.searchResultTitles = this.searchResultItems.locator('//h2[@class="product-title"]/a');
   }
 
   async open() {
@@ -62,6 +75,32 @@ class MainPage {
 
   async goToCategory(name: string) {
     await this.categoryLink(name).click();
+  }
+
+  async searchFor(query: string) {
+    await this.searchInput.fill(query);
+    await this.searchButton.click();
+  }
+
+  async assertSearchResultsExist() {
+    await assertElementVisibility(this.searchResultsContainer, 'контейнер с результатами поиска');
+    const resultsCount = await this.searchResultItems.count();
+    await expectValueToBeGreaterThan(resultsCount, 0);
+  }
+
+  async assertSearchResultsContain(query: string) {
+    const titles = await this.searchResultTitles.allTextContents();
+
+    for (const title of titles) {
+      const normalizedTitle = title.trim().toLowerCase();
+      const normalizedQuery = query.trim().toLowerCase();
+
+      await expectToEqual({
+        expected: true,
+        actual: normalizedTitle.includes(normalizedQuery),
+        description: `результат поиска "${title}" содержит "${query}"`,
+      });
+    }
   }
 }
 
