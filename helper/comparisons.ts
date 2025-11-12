@@ -15,3 +15,8 @@ export async function expectValueToBeGreaterThan(actual: number, minValue = 0) {
 export async function expectToEqual({ expected, actual, description }: EqualComparison) {
   expect(actual, `Проверяем, что ${description} === ${JSON.stringify(expected)}`).toEqual(expected);
 }
+
+// Проверяет, что значение меньше максимального
+export async function expectValueToBeLessThan(actual: number, maxValue = 1) {
+  expect(actual, `Проверяем, что значение ${actual} меньше ${maxValue}`).toBeLessThan(maxValue);
+}

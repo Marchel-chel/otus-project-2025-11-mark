@@ -23,6 +23,12 @@ class MainPage {
   readonly searchResultItems: Locator;
   readonly searchResultTitles: Locator;
 
+  readonly featuredProduct: Locator;
+  readonly featuredProductTitle: Locator;
+  readonly addToCartButton: Locator;
+  readonly messageSuccessAddedToCart: Locator;
+  readonly cartButton: Locator;
+
   constructor(readonly page: Page) {
     this.baseUrl = process.env.BASE_URL!;
 
@@ -32,6 +38,7 @@ class MainPage {
     this.logInLink = this.headerLinksContainer.locator('//a[contains(@href, "login")]');
     this.customerInfo = this.headerLinksContainer.locator('//a[contains(@class, "account")]');
     this.logOutBtn = this.headerLinksContainer.locator('//a[contains(@href, "logout")]');
+    this.cartButton = this.headerLinksContainer.locator('//a[contains(@href, "cart")]');
 
     this.categoriesContainer = this.page.locator('//div[contains(@class, "header-menu")]');
     this.categoryLink = (name: string) => this.categoriesContainer.getByRole('link', { name, exact: true });
@@ -41,6 +48,11 @@ class MainPage {
     this.searchResultsContainer = this.page.locator('//div[contains(@class, "product-grid")]');
     this.searchResultItems = this.searchResultsContainer.locator('//div[contains(@class, "item-box")]');
     this.searchResultTitles = this.searchResultItems.locator('//h2[@class="product-title"]/a');
+
+    this.featuredProduct = this.page.locator('//div[contains(@data-productid, "31")]');
+    this.featuredProductTitle = this.featuredProduct.locator('//h2[@class="product-title"]/a');
+    this.addToCartButton = this.featuredProduct.locator('//input');
+    this.messageSuccessAddedToCart = this.page.locator('//div[contains(@id, "bar-notification")]//p');
   }
 
   async open() {
@@ -101,6 +113,16 @@ class MainPage {
         description: `результат поиска "${title}" содержит "${query}"`,
       });
     }
+  }
+
+  async addFeaturedProductToCart() {
+    await this.addToCartButton.click();
+    await assertElementVisibility(this.messageSuccessAddedToCart, 'сообщение об успешном добавлении товара в корзину');
+  }
+
+  async goToCart() {
+    await this.cartButton.click();
+    await waitForUrl(this.page, /\/cart\/?$/);
   }
 }
 

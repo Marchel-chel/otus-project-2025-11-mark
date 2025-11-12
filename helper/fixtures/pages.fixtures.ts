@@ -2,12 +2,14 @@ import { test as fixtureTest } from '@playwright/test';
 import LoginPage from '../../pages/LoginPage';
 import MainPage from '../../pages/MainPage';
 import CategoryPage from '../../pages/CategoryPage';
+import CartPage from '../../pages/CartPage';
 
 export const test = fixtureTest.extend<{
   mainPage: MainPage;
   loginPage: LoginPage;
   loggedInMainPage: MainPage;
   categoryPage: CategoryPage;
+  cartPage: CartPage;
 }>({
   mainPage: async ({ page }, use) => {
     const mainPage = new MainPage(page);
@@ -37,6 +39,12 @@ export const test = fixtureTest.extend<{
     const categoryPage = new CategoryPage(page);
 
     await use(categoryPage);
+  },
+
+  cartPage: async ({ page }, use) => {
+    const cartPage = new CartPage(page);
+
+    await use(cartPage);
   },
 });
 
