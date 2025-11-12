@@ -1,11 +1,8 @@
-import type { Page, Locator } from "@playwright/test";
-import {
-  assertElementHasText,
-  assertElementVisibility,
-  waitForUrl,
-} from "../helper/pageActions";
+import type { Page, Locator } from '@playwright/test';
+import { waitForUrl } from '../helper/pageActions';
+import { assertElementHasText, assertElementVisibility } from '../helper/elements';
 
-import "dotenv/config";
+import 'dotenv/config';
 
 class LoginPage {
   readonly pageUrl!: string;
@@ -20,22 +17,12 @@ class LoginPage {
   constructor(readonly page: Page) {
     this.pageUrl = `${process.env.BASE_URL}/login`;
 
-    this.title = this.page.locator(
-      '//div/h1[contains(text(), "Welcome, Please Sign In!")]'
-    );
+    this.title = this.page.locator('//div/h1[contains(text(), "Welcome, Please Sign In!")]');
 
-    this.emailInput = this.page.locator(
-      '//div/input[contains(@class, "email")]'
-    );
-    this.passwordInput = this.page.locator(
-      '//div/input[contains(@class, "password")]'
-    );
-    this.loginButton = this.page.locator(
-      '//div/input[contains(@value, "Log in")]'
-    );
-    this.messageError = this.page.locator(
-      '//div[contains(@class, "message-error")]'
-    );
+    this.emailInput = this.page.locator('//div/input[contains(@class, "email")]');
+    this.passwordInput = this.page.locator('//div/input[contains(@class, "password")]');
+    this.loginButton = this.page.locator('//div/input[contains(@value, "Log in")]');
+    this.messageError = this.page.locator('//div[contains(@class, "message-error")]');
   }
 
   async open() {
@@ -49,12 +36,8 @@ class LoginPage {
   }
 
   async assertTitleVisibility() {
-    await assertElementVisibility(this.title, "заголовок страницы логина");
-    await assertElementHasText(
-      this.title,
-      `заголовок страницы логина`,
-      "Welcome, Please Sign In!"
-    );
+    await assertElementVisibility(this.title, 'заголовок страницы логина');
+    await assertElementHasText(this.title, `заголовок страницы логина`, 'Welcome, Please Sign In!');
   }
 
   async login(email: string, password: string) {
@@ -64,10 +47,7 @@ class LoginPage {
   }
 
   async assertErrorMessageIsVisible() {
-    await assertElementVisibility(
-      this.messageError,
-      "сообщение об ошибке логина"
-    );
+    await assertElementVisibility(this.messageError, 'сообщение об ошибке логина');
   }
 }
 

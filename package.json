@@ -13,7 +13,9 @@
     "allure:serve": "allure serve allure-results",
     "pretest": "echo \"BROWSER=Chromium\nBASE_URL=https://demowebshop.tricentis.com\nAUTHOR=Marchel\nPROJECT=Otus Playwright Demo\" > allure-results/environment.properties",
     "lint": "eslint . --ext .ts",
-    "format": "prettier --write ."
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check \"**/*.{ts,json,md}\""
   },
   "keywords": [],
   "author": "",
